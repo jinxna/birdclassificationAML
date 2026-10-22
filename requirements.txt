@@ -4,5 +4,3 @@ torchvision
 timm
 streamlit
 pillow
-numpy
-matplotlib
