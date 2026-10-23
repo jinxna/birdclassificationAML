@@ -1,16 +1,5 @@
 """
 COS30082 Assignment 1 - Bird Species Classifier (Streamlit web app)
-
-What it does:
-  1. You upload a bird photo (or pick an example photo).
-  2. The trained model predicts the species.
-  3. The app shows the top-5 guesses with their confidence.
-
-Files needed next to this script:
-  - best_model.pth     (weights saved by the training notebook)
-  - class_names.json   (the 200 species names, in label order)
-  - examples/          (a few sample photos)
-
 Run locally with:  streamlit run app.py
 """
 import json
@@ -25,12 +14,10 @@ from torchvision import transforms
 HERE = Path(__file__).parent
 BACKBONE = "resnet50"   # must be the same model that was trained in the notebook (Run C / D)
 
-st.set_page_config(page_title="Bird Species Classifier", page_icon="🐦")
+st.set_page_config(page_title="Bird Species Classifier")
 
 
-# ---------------------------------------------------------------------------
 # 1. LOAD THE MODEL (only once, then Streamlit keeps it in memory)
-# ---------------------------------------------------------------------------
 @st.cache_resource
 def load_model():
     # Species names, in the same order as the labels used in training
@@ -53,9 +40,7 @@ def load_model():
 
 model, nice_names = load_model()
 
-# ---------------------------------------------------------------------------
 # 2. PREPROCESSING - must be the same as the evaluation transform in the notebook
-# ---------------------------------------------------------------------------
 preprocess = transforms.Compose([
     transforms.Resize(256),        # shorter side -> 256
     transforms.CenterCrop(224),    # take the centre 224 x 224
@@ -64,9 +49,7 @@ preprocess = transforms.Compose([
 ])
 
 
-# ---------------------------------------------------------------------------
 # 3. PREDICTION
-# ---------------------------------------------------------------------------
 def predict(image):
     """Return the 5 most likely species as a list of (name, probability)."""
     image = image.convert("RGB")                 # make sure it has 3 colour channels
@@ -84,10 +67,9 @@ def predict(image):
     return results
 
 
-# ---------------------------------------------------------------------------
 # 4. WEB PAGE
-# ---------------------------------------------------------------------------
-st.title("🐦 Bird Species Classifier")
+
+st.title("Bird Species Classifier")
 st.write(
     "Upload a photo of a bird and the model will guess which of the **200 species** "
     "(Caltech-UCSD Birds 200) it is."
